@@ -1,0 +1,46 @@
+{
+  "transactions": [
+    {
+      "id": "2",
+      "date": "2026-10-01",
+      "description": "Pembelian tepung terigu 25 kg",
+      "amount": 325000,
+      "type": "expense",
+      "categoryId": "2"
+    },
+    {
+      "id": "3",
+      "date": "2026-10-02",
+      "description": "Pembayaran listrik toko",
+      "amount": 450000,
+      "type": "expense",
+      "categoryId": "3"
+    },
+    {
+      "id": "FJEQxKk8NgI",
+      "date": "2026-10-01",
+      "description": "Kammpung",
+      "amount": 850000,
+      "type": "income",
+      "categoryId": "1"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Penjualan",
+      "type": "income"
+    },
+    {
+      "id": "2",
+      "name": "Bahan Baku",
+      "type": "expense"
+    },
+    {
+      "id": "3",
+      "name": "Operasional",
+      "type": "expense"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
