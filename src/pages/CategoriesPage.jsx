@@ -29,17 +29,28 @@ function CategoriesPage() {
         fetchCategories();
     }, []);
 
+    const handleAddClick = () => {
+        setSelectedCategory(null);
+        setIsOpen(true);
+        setError("");
+    };
 
     const handleAddCategory = async (category) => {
         setLoading(true)
         const { error, message } = await createCategory(category);
         if (error) {
             setError(message)
-            return
+            setLoading(false)
         }
-        setIsOpen(false)
+        // setIsOpen(false)
         await fetchCategories();
         setLoading(false)
+    };
+
+    const handleUpdateClick = (category) => {
+        setSelectedCategory(category);
+        setIsOpen(true);
+        setError("");
     };
 
     const handleUpdateCategory = async (category) => {
@@ -47,7 +58,7 @@ function CategoriesPage() {
         const { error, message } = await updateCategory(category.id, category.name, category.type);
         if (error) {
             setError(message)
-            return
+            setLoading(false)
         }
         setIsOpen(false)
         await fetchCategories();
@@ -57,17 +68,6 @@ function CategoriesPage() {
     const handleDeleteClick = (category) => {
         setSelectedCategory(category);
         setIsDeleteOpen(true);
-        setError("");
-    };
-
-    const handleUpdateClick = (category) => {
-        setSelectedCategory(category);
-        setIsOpen(true);
-        setError("");
-    };
-    const handleAddClick = () => {
-        setSelectedCategory(null);
-        setIsOpen(true);
         setError("");
     };
 
@@ -89,32 +89,45 @@ function CategoriesPage() {
         <PageScaffold>
             {loading && <p>Loading</p>}
             {error && <p>{error}</p>}
-            {!loading && <div>
-                <div className="flex justify-between">
-                    <h1 className='text-2xl font-bold'>Category List</h1>
-                    <button
-                        onClick={() => handleAddClick()}
-                        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                    >
-                        + Add Category
-                    </button>
-                </div>
-                <div className="grid grid-cols-3 mt-6">
-                    <p className="font-bold">Name</p>
-                    <p className="font-bold text-center">Type</p>
-
-
-                </div>
-                {categories.map((category) => (
-                    <div className="grid grid-cols-3 mt-6" key={category.id}>
-                        <p className="">{category.name}</p>
-                        <p className="text-center">{category.type}</p>
-                        <div className="text-end">
-                            <button className="text-blue-500 mr-6" onClick={() => handleUpdateClick(category)}>Update</button>
-                            <button className="text-red-500" onClick={() => handleDeleteClick(category)}>Delete</button>
-                        </div>
+            <div>
+                {!loading && <div>
+                    <div className="flex justify-between">
+                        <h1 className='text-2xl font-bold'>Category List</h1>
+                        <button
+                            onClick={() => handleAddClick()}
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                        >
+                            + Add Category
+                        </button>
                     </div>
-                ))}
+                    <div className="grid grid-cols-3 mt-6">
+                        <p className="font-bold">Name</p>
+                        <p className="font-bold text-center">Type</p>
+
+
+                    </div>
+                    {categories.map((category) => (
+                        <div className="grid grid-cols-3 mt-6" key={category.id}>
+                            <p className="">{category.name}</p>
+                            <p className="text-center">{category.type}</p>
+                            <div className="text-end">
+                                <button className="text-blue-500 mr-6" onClick={() => handleUpdateClick(category)}>Update</button>
+                                <button className="text-red-500" onClick={() => handleDeleteClick(category)}>Delete</button>
+                            </div>
+                        </div>
+                    ))}
+
+                    <ConfirmDeleteDialog
+                        isOpen={isDeleteOpen}
+                        onClose={() => {
+                            setIsDeleteOpen(false);
+                            setSelectedCategory(null);
+                        }}
+                        onConfirm={handleDeleteCategory}
+                        itemName={selectedCategory?.name || "category"}
+                        loading={loading}
+                    />
+                </div>}
                 <CategoryForm
                     key={selectedCategory?.id ?? "new"}
                     isOpen={isOpen}
@@ -123,17 +136,7 @@ function CategoriesPage() {
                     onUpdate={handleUpdateCategory}
                     selectedCategory={selectedCategory}
                 />
-                <ConfirmDeleteDialog
-                    isOpen={isDeleteOpen}
-                    onClose={() => {
-                        setIsDeleteOpen(false);
-                        setSelectedCategory(null);
-                    }}
-                    onConfirm={handleDeleteCategory}
-                    itemName={selectedCategory?.name || "category"}
-                    loading={loading}
-                />
-            </div>}
+            </div>
 
         </PageScaffold>
     )

@@ -32,11 +32,11 @@ export default function CategoryForm({
             setCategoryName("")
             setType("")
 
-            onClose();
         } catch (err) {
-            setError(err.response?.data?.message || err.message || "Failed to add category.");
+            alert(err.message || "Failed to add category.")
         } finally {
             setLoading(false);
+            onClose();
         }
     };
 
