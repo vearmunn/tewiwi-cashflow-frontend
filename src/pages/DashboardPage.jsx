@@ -14,10 +14,12 @@ function Dashboard() {
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [categories, setCategories] = useState([]);
     const [transactions, setTransactions] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingCategories, setLoadingCategories] = useState(true);
+    const [loadingTransactions, setLoadingTransactions] = useState(true);
     const [error, setError] = useState("");
 
     const fetchCategories = async () => {
+        setLoadingCategories(true)
         const { error, data, message } = await getCategories()
 
         if (!error) {
@@ -26,10 +28,11 @@ function Dashboard() {
             setError(message)
         }
 
-        setLoading(false)
+        setLoadingCategories(false)
     }
 
     const fetchTransactions = async () => {
+        setLoadingTransactions(true)
         const { error, data, message } = await getTransactions()
 
         if (!error) {
@@ -38,7 +41,7 @@ function Dashboard() {
             setError(message)
         }
 
-        setLoading(false)
+        setLoadingTransactions(false)
     }
 
     useEffect(() => {
@@ -54,15 +57,15 @@ function Dashboard() {
     };
 
     const handleAddTransaction = async (transaction) => {
-        setLoading(true)
+        setLoadingTransactions(true)
         const { error, message } = await createTransaction(transaction);
         if (error) {
             setError(message)
-            setLoading(false)
+            setLoadingTransactions(false)
         }
         // setIsOpen(false)
         await fetchTransactions();
-        setLoading(false)
+        setLoadingTransactions(false)
     };
 
     const handleUpdateClick = (transaction) => {
@@ -72,15 +75,15 @@ function Dashboard() {
     };
 
     const handleUpdateTransaction = async (transaction) => {
-        setLoading(true)
+        setLoadingTransactions(true)
         const { error, message } = await updateTransaction(transaction.id, { description: transaction.description, amount: transaction.amount, categoryId: transaction.categoryId, date: transaction.date });
         if (error) {
             setError(message)
-            setLoading(false)
+            setLoadingTransactions(false)
         }
         setIsOpen(false)
         await fetchTransactions();
-        setLoading(false)
+        setLoadingTransactions(false)
     };
 
     const handleDeleteClick = (transaction) => {
@@ -91,7 +94,7 @@ function Dashboard() {
 
     const handleDeleteTransaction = async () => {
         if (!selectedTransaction) return;
-        setLoading(true)
+        setLoadingTransactions(true)
         const { error, message } = await deleteTransaction(selectedTransaction.id);
         if (error) {
             setError(message)
@@ -100,11 +103,11 @@ function Dashboard() {
         setIsDeleteOpen(false);
         setSelectedTransaction(null);
         await fetchTransactions();
-        setLoading(false)
+        setLoadingTransactions(false)
     };
     return (
         <PageScaffold>
-            {loading && <p>Loading</p>}
+            {loadingTransactions && <p>Loading</p>}
             {error && <p>{error}</p>}
 
             <div className='flex items-center justify-between'>
@@ -122,9 +125,7 @@ function Dashboard() {
                     <LogoutButton />
                 </div>
             </div>
-            {/* {categories.map((category) => (<p>{category.id}</p>))} */}
-
-            {!loading && transactions.map((transaction) => (
+            {!loadingTransactions && !loadingCategories && transactions.map((transaction) => (
                 <TransactionItem
                     key={transaction.id}
                     description={transaction.description}
@@ -145,9 +146,9 @@ function Dashboard() {
                 }}
                 onConfirm={handleDeleteTransaction}
                 itemName={selectedTransaction?.description || "transaction"}
-                loading={loading}
+                loading={loadingTransactions}
             />
-            <TransactionForm
+            {!loadingTransactions && !loadingCategories && <TransactionForm
                 key={selectedTransaction?.id ?? "new"}
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
@@ -155,7 +156,7 @@ function Dashboard() {
                 onUpdate={handleUpdateTransaction}
                 categories={categories}
                 selectedTransaction={selectedTransaction}
-            />
+            />}
         </PageScaffold>
     )
 }

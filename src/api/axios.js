@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import supabase from './supabase';
 
 const api = axios.create({
     baseURL: 'http://localhost:3000',
@@ -8,8 +9,14 @@ const api = axios.create({
     },
 });
 
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("access_token");
+api.interceptors.request.use(async (config) => {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+        throw error;
+    }
+
+    const token = data.session?.access_token;
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;

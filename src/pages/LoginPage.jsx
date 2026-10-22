@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import supabase from '../api/supabase';
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
     const navigate = useNavigate();
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -22,18 +22,24 @@ function LoginPage() {
                 password,
             });
 
-            const { access_token, user } = response.data.session;
+            const { accessToken, refreshToken } = response.data.data;
 
-            localStorage.setItem("access_token", access_token);
+            const { error } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken,
+            });
 
-            if (user) {
-                localStorage.setItem("user", JSON.stringify(user));
+            if (error) {
+                throw error;
             }
-            navigate("/");
+
+            navigate("/", { replace: true });
         } catch (err) {
-            console.log(err)
+            console.error(err);
+
             setError(
                 err.response?.data?.message ||
+                err.message ||
                 "Login failed. Please try again."
             );
         } finally {

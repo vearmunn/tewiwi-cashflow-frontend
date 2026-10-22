@@ -11,8 +11,8 @@ export default function TransactionForm({
     selectedTransaction
 }) {
     const [description, setDescription] = useState(selectedTransaction?.description || "")
-    const [selectedCategoryId, setSelectedCategoryId] = useState(selectedTransaction?.category_id || "")
-    const [amount, setAmount] = useState(selectedTransaction?.amount || 0)
+    const [selectedCategoryId, setSelectedCategoryId] = useState(selectedTransaction?.category_id || categories[0].id)
+    const [amount, setAmount] = useState(selectedTransaction?.amount || "")
     const [date, setDate] = useState(formatDateForInput(selectedTransaction?.date) || "")
 
     const [loading, setLoading] = useState(false);
