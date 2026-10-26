@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import supabase from '../api/supabase';
+import Navbar from './Navbar';
 
 export default function ProtectedRoute() {
     const [loading, setLoading] = useState(true);
@@ -38,6 +39,12 @@ export default function ProtectedRoute() {
         return <Navigate to="/login" replace />;
     }
 
-    return <Outlet />;
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <Navbar />
+
+            <Outlet />
+        </div>
+    );
 }
 
