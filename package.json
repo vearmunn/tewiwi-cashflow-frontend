@@ -11,6 +11,7 @@
     "mock-api": "json-server db.json --port 3001"
   },
   "dependencies": {
+    "@daypicker/react": "^10.0.2",
     "@supabase/supabase-js": "^2.118.0",
     "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.20.0",

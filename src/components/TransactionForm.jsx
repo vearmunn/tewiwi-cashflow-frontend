@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import formatDateForInput from "../utils/formatDate";
+import { formatDateForInput } from "../utils/formatDate";
 
 export default function TransactionForm({
     isOpen,

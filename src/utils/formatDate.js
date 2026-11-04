@@ -1,4 +1,4 @@
-export default function formatDateForInput(value) {
+function formatDateForInput(value) {
     if (!value) return "";
 
     const parsed = new Date(value);
@@ -11,3 +11,14 @@ export default function formatDateForInput(value) {
 
     return `${year}-${month}-${day}`;
 }
+
+function formatDateForOutput(value) {
+    return new Intl.DateTimeFormat("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+    }).format(new Date(value));
+}
+
+export { formatDateForInput, formatDateForOutput }

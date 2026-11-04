@@ -1,8 +1,10 @@
 
 import api from './axios';
 
-export const getTransactions = async () => {
-    const response = await api.get('/transactions');
+export const getTransactions = async (params) => {
+    const response = await api.get('/transactions', {
+        params: params
+    });
     if (response.status !== 200) {
         console.log(response.data.data)
         return { error: true, data: null, message: response.message };

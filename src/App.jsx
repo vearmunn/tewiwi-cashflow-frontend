@@ -5,6 +5,7 @@ import Error from './pages/Error';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CategoriesPage from './pages/CategoriesPage';
+import TransactionsPage from './pages/TransactionsPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>
