@@ -17,8 +17,17 @@ function formatDateForOutput(value) {
         day: "numeric",
         month: "long",
         year: "numeric",
-        timeZone: "UTC",
+        timeZone: "Asia/Jakarta",
     }).format(new Date(value));
 }
 
-export { formatDateForInput, formatDateForOutput }
+function formatDateShort(value) {
+    return new Intl.DateTimeFormat("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "Asia/Jakarta",
+    }).format(new Date(value));
+}
+
+export { formatDateForInput, formatDateForOutput, formatDateShort }

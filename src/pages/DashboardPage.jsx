@@ -5,10 +5,10 @@ import incomeIcon from "../assets/income.png";
 import transactionIcon from "../assets/transaction.png";
 import cashflowIcon from "../assets/cashflow.png";
 import SummaryItem from '../components/SummaryItem';
-import calculateTransaction from '../utils/calculateTransaction';
 import { formatRupiah } from '../utils/formatRupiah';
 import TransactionsPage from './TransactionsPage';
-import { getTransactions } from '../api/transactionApi';
+import { getSummary } from '../api/transactionApi';
+import Charts from '../components/Charts';
 
 function Dashboard() {
     // const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ function Dashboard() {
     // const [selectedTransaction, setSelectedTransaction] = useState(null);
     // const [categories, setCategories] = useState([]);
     const [transactions, setTransactions] = useState([]);
-    const [summary, setSummary] = useState(null)
+    // const [summary, setSummary] = useState(null)
     // const [loadingCategories, setLoadingCategories] = useState(true);
     const [loadingTransactions, setLoadingTransactions] = useState(true);
     const [error, setError] = useState("");
@@ -37,14 +37,15 @@ function Dashboard() {
 
     const fetchTransactions = async () => {
         setLoadingTransactions(true)
-        const { error, data, message } = await getTransactions()
+        const { error, data, message } = await getSummary()
 
         if (!error) {
             setTransactions(data)
-            setSummary({
-                'income': calculateTransaction(data, 'income'),
-                'expense': calculateTransaction(data, 'expense')
-            })
+            console.log(data)
+            // setSummary({
+            //     'income': calculateTransaction(data, 'income'),
+            //     'expense': calculateTransaction(data, 'expense')
+            // })
         } else {
             setError(message)
         }
@@ -115,20 +116,30 @@ function Dashboard() {
     // };
 
     return (
-        <div className="bg-slate-200 p-8">
+        <div className="bg-slate-200 p-8 min-h-screen">
             {error && <p>{error}</p>}
             {loadingTransactions ? <p>Loading</p> :
+
                 <div className='max-w-7xl mx-auto items-center'>
                     <h1 className='text-2xl font-bold mb-4'>Summary</h1>
                     <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
-                        <SummaryItem title='Income' value={formatRupiah(summary.income)} icon={incomeIcon} iconColor='bg-green-500' />
-                        <SummaryItem title='Expense' value={(formatRupiah(summary.expense))} icon={expenseIcon} iconColor='bg-red-400' />
-                        <SummaryItem title='Net Cashflow' value={formatRupiah(summary.income - summary.expense)} icon={cashflowIcon} iconColor='bg-blue-400' />
-                        <SummaryItem title='Transactions' value={transactions.length} icon={transactionIcon} iconColor='bg-amber-400' />
-                    </div>
-                </div>}
+                        <SummaryItem title='Income' value={formatRupiah(transactions.total_income)} icon={incomeIcon} iconColor='bg-green-500' />
+                        <SummaryItem title='Expense' value={(formatRupiah(transactions.total_expense))} icon={expenseIcon} iconColor='bg-red-400' />
+                        <SummaryItem title='Net Cashflow' value={formatRupiah(transactions.net_cashflow)} icon={cashflowIcon} iconColor='bg-blue-400' />
+                        <SummaryItem title='Transactions' value={transactions.transaction_number} icon={transactionIcon} iconColor='bg-amber-400' />
 
-            <br />
+                    </div>
+
+                    <div className='bg-white p-3 mt-5 rounded-xl'>
+                        <h1 className='text-2xl font-bold mb-4'>Income and Expense Trends</h1>
+                        <div className='h-96 mt-5 p-'>
+                            <Charts data={transactions.data} />
+                        </div>
+                    </div>
+                </div>
+
+            }
+
 
             <TransactionsPage isInDashboard={true} limit={10} />
         </div>

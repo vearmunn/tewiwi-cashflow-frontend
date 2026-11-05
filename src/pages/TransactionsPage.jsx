@@ -132,7 +132,7 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
     };
 
     return (
-        <div className="bg-slate-200 p-8">
+        <div className="bg-slate-200 p-8 min-h-screen">
             <CustomContainer>
                 {!isInDashboard && <div>
                     <h1 className='text-2xl font-bold'>Filter</h1>
