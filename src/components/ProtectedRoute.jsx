@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import supabase from '../api/supabase';
 import Navbar from './Navbar';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function ProtectedRoute() {
     const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ export default function ProtectedRoute() {
     }, []);
 
     if (loading) {
-        return <p>Checking authentication...</p>;
+        return <LoadingSpinner />;
     }
 
     if (!session) {

@@ -4,6 +4,7 @@ import { createCategory, deleteCategory, getCategories, updateCategory } from ".
 import ConfirmDeleteDialog from "../components/ConfirmDeletionDialog";
 import CategoryForm from "../components/CategoryForm";
 import CustomContainer from '../components/CustomContainer';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function CategoriesPage() {
     const [isOpen, setIsOpen] = useState(false);
@@ -89,7 +90,7 @@ function CategoriesPage() {
     return (
         <div className="h-screen bg-slate-200 p-8">
             <CustomContainer>
-                {loading && <p>Loading</p>}
+                {loading && <LoadingSpinner />}
                 {error && <p>{error}</p>}
                 <div>
                     {!loading && <div>

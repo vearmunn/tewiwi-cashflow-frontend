@@ -7,6 +7,8 @@ import TransactionItem from "../components/transactionItem"
 import { getCategories } from "../api/categoryApi";
 import { NavLink } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
+import CustomDatePicker from "../components/CustomDatePicker";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function TransactionsPage({ isInDashboard = false, limit = null }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -189,77 +191,56 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                             </select>
                         </div>
 
-                        <div className="flex flex-col w-full">
-                            <label className="text-sm text-gray-500">
-                                Filter Tanggal Awal
-                            </label>
-                            <input
-                                type="date"
-                                value={filter.startDate}
-                                placeholder="Pilih Tanggal"
+                        <CustomDatePicker
+                            className="w-full"
+                            label="Filter Tanggal Awal"
+                            value={filter.startDate}
+                            onChange={(e) => {
+                                setFilter((prev) => ({
+                                    ...prev,
+                                    startDate: e.target.value
+                                }))
 
-                                onChange={(e) => {
-                                    setFilter((prev) => ({
-                                        ...prev,
-                                        startDate: e.target.value
-                                    }))
-
-                                    if (filter.startDate && filter.endDate) {
-                                        fetchTransactions({ keywords: filter.search, categoryId: filter.categoryId, type: filter.type, startDate: e.target.value, endDate: filter.endDate })
-                                    }
+                                if (filter.startDate && filter.endDate) {
+                                    fetchTransactions({ keywords: filter.search, categoryId: filter.categoryId, type: filter.type, startDate: e.target.value, endDate: filter.endDate })
                                 }
+                            }}
+                        />
 
+                        <CustomDatePicker
+                            className="w-full"
+                            label="Filter Tanggal Akhir"
+                            value={filter.endDate}
+                            onChange={(e) => {
+                                setFilter((prev) => ({
+                                    ...prev,
+                                    endDate: e.target.value
+                                }))
+                                if (filter.startDate && filter.endDate) {
+                                    fetchTransactions({ keywords: filter.search, categoryId: filter.categoryId, type: filter.type, startDate: filter.startDate, endDate: e.target.value })
                                 }
-                                className="rounded-lg border border-gray-300 px-3 py-2"
-                            />
-                        </div>
-
-                        <div className="flex flex-col w-full">
-                            <label className="text-sm text-gray-500">
-                                Filter Tanggal Akhir
-                            </label>
-                            <input
-                                type="date"
-                                value={filter.endDate}
-                                placeholder="Pilih Tanggal"
-
-                                onChange={(e) => {
-                                    setFilter((prev) => ({
-                                        ...prev,
-                                        endDate: e.target.value
-                                    }))
-                                    if (filter.startDate && filter.endDate) {
-                                        fetchTransactions({ keywords: filter.search, categoryId: filter.categoryId, type: filter.type, startDate: filter.startDate, endDate: e.target.value })
-                                    }
-                                }
-
-                                }
-                                className="rounded-lg border border-gray-300 px-3 py-2"
-                            />
-                        </div>
+                            }}
+                        />
 
                     </div>
                     <br />
                 </div>}
-                {loadingTransactions && <p>Loading</p>}
                 {error && <p>{error}</p>}
                 <div className='flex items-center justify-between'>
                     <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transaction' : 'Transactions'}</h1>
-
+                    {loadingTransactions && <LoadingSpinner />}
                     {isInDashboard
                         ?
                         <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700'>
                             Lihat Semua
                         </NavLink>
                         :
-                        <div>
-                            <button
-                                className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                                onClick={() => handleAddClick()}
-                            >
-                                + Add Transaction
-                            </button>
-                        </div>}
+                        <button
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                            onClick={() => handleAddClick()}
+                        >
+                            + Add Transaction
+                        </button>}
                 </div>
 
                 {!loadingTransactions && !loadingCategories && transactions.map((transaction) => (
