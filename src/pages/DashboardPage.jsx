@@ -189,7 +189,7 @@ function Dashboard() {
 
                     </div>
 
-                    <div className='bg-white p-3 mt-5 rounded-xl'>
+                    <div className='bg-white p-3 mt-7 rounded-xl'>
                         <h1 className='text-2xl font-bold mb-4'>Income and Expense Trends</h1>
                         <div className='h-96 mt-5 p-'>
                             <Charts data={summary.data} />
@@ -198,6 +198,27 @@ function Dashboard() {
                 </div>
 
             }
+
+            <div className='max-w-7xl mx-auto  mt-7 rounded-lg'>
+                <h1 className='text-2xl font-bold mb-4'>Upcoming Cash Obligations</h1>
+                <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 sm:grid sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-center sm:gap-3">
+                    <div className="min-w-0">
+                        <h3 className="truncate font-semibold text-gray-800">
+                            Monthly Electricity Bill
+                        </h3>
+                    </div>
+                    <p className="font-bold text-gray-900 md:font-normal md:text-black">
+                        Rp 350.000
+                    </p>
+                    <p className="text-sm md:text-base text-gray-600">
+                        Deadline: 15 November 2026
+                    </p>
+                    <button className="cursor-pointer w-full rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 sm:w-auto">
+                        Pay
+                    </button>
+
+                </div>
+            </div>
 
 
             <TransactionsPage isInDashboard={true} limit={10} />

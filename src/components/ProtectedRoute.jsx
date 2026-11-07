@@ -33,7 +33,7 @@ export default function ProtectedRoute() {
     }, []);
 
     if (loading) {
-        return <LoadingSpinner />;
+        return <div className='h-screen w-screen items-center mx-auto'><LoadingSpinner /></div>;
     }
 
     if (!session) {
