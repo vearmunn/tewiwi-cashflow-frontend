@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { createTransaction, deleteTransaction, getTransactions, updateTransaction } from "../api/transactionApi";
 import ConfirmDeleteDialog from "../components/ConfirmDeletionDialog";
 import CustomContainer from "../components/CustomContainer"
-import TransactionForm from "../components/TransactionForm";
 import TransactionItem from "../components/transactionItem"
 import { getCategories } from "../api/categoryApi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import CustomDatePicker from "../components/CustomDatePicker";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { deleteTransaction, getTransactions } from "../api/transactionApi";
 
 function TransactionsPage({ isInDashboard = false, limit = null }) {
-    const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate()
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [categories, setCategories] = useState([]);
@@ -63,41 +62,6 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
         fetchCategories();
     }, []);
 
-    const handleAddClick = () => {
-        setSelectedTransaction(null);
-        setIsOpen(true);
-        setError("");
-    };
-
-    const handleAddTransaction = async (transaction) => {
-        setLoadingTransactions(true)
-        const { error, message } = await createTransaction(transaction);
-        if (error) {
-            setError(message)
-            setLoadingTransactions(false)
-        }
-        // setIsOpen(false)
-        await fetchTransactions();
-        setLoadingTransactions(false)
-    };
-
-    const handleUpdateClick = (transaction) => {
-        setSelectedTransaction(transaction);
-        setIsOpen(true);
-        setError("");
-    };
-
-    const handleUpdateTransaction = async (transaction) => {
-        setLoadingTransactions(true)
-        const { error, message } = await updateTransaction(transaction.id, { description: transaction.description, amount: transaction.amount, categoryId: transaction.categoryId, date: transaction.date });
-        if (error) {
-            setError(message)
-            setLoadingTransactions(false)
-        }
-        setIsOpen(false)
-        await fetchTransactions();
-        setLoadingTransactions(false)
-    };
 
     const handleDeleteClick = (transaction) => {
         setSelectedTransaction(transaction);
@@ -237,7 +201,14 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                         :
                         <button
                             className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                            onClick={() => handleAddClick()}
+                            onClick={() => {
+                                navigate('/add-transaction', {
+                                    state: {
+                                        isUpdating: false,
+                                        categories: categories
+                                    }
+                                })
+                            }}
                         >
                             + Add Transaction
                         </button>}
@@ -252,7 +223,20 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                         type={transaction.category_type}
                         amount={transaction.amount}
                         onClickDelete={() => handleDeleteClick(transaction)}
-                        onClickUpdate={() => handleUpdateClick(transaction)}
+                        onClickUpdate={() => {
+                            navigate('/add-transaction', {
+                                state: {
+                                    isUpdating: true,
+                                    id: transaction.id,
+                                    description: transaction.description,
+                                    date: transaction.date,
+                                    category_id: categories.find((item) => item.id === transaction.category_id).id,
+                                    type: transaction.category_type,
+                                    amount: transaction.amount,
+                                    categories: categories
+                                }
+                            })
+                        }}
                     />
                 ))}
                 <ConfirmDeleteDialog
@@ -265,15 +249,6 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                     itemName={selectedTransaction?.description || "transaction"}
                     loading={loadingTransactions}
                 />
-                {!loadingTransactions && !loadingCategories && <TransactionForm
-                    key={selectedTransaction?.id ?? "new"}
-                    isOpen={isOpen}
-                    onClose={() => setIsOpen(false)}
-                    onAdd={handleAddTransaction}
-                    onUpdate={handleUpdateTransaction}
-                    categories={categories}
-                    selectedTransaction={selectedTransaction}
-                />}
             </CustomContainer>
         </div>
     )

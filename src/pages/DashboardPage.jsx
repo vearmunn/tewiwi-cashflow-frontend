@@ -12,12 +12,9 @@ import Charts from '../components/Charts';
 import CustomDatePicker from '../components/CustomDatePicker';
 import { formatDateForOutput } from '../utils/formatDate';
 import LoadingSpinner from '../components/LoadingSpinner';
+import CashObligationSection from '../components/CashObligationSection';
 
 function Dashboard() {
-    // const [isOpen, setIsOpen] = useState(false);
-    // const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    // const [selectedTransaction, setSelectedTransaction] = useState(null);
-    // const [categories, setCategories] = useState([]);
     const [summary, setSummary] = useState([]);
     const [rangeDateSummary, setRangeDateSummary] = useState({
         startDate: "",
@@ -27,24 +24,9 @@ function Dashboard() {
         startDate: "",
         endDate: ""
     });
-    // const [summary, setSummary] = useState(null)
-    // const [loadingCategories, setLoadingCategories] = useState(true);
     const [loadingSummary, setLoadingSummary] = useState(true);
-    const [error, setError] = useState("");
+    const [errorSummary, setErrorSummary] = useState("");
 
-    // const fetchCategories = async () => {
-    //     setLoadingCategories(true)
-    //     const { error, data, message } = await getCategories()
-
-    //     if (!error) {
-    //         setCategories(data)
-
-    //     } else {
-    //         setError(message)
-    //     }
-
-    //     setLoadingCategories(false)
-    // }
 
     const fetchSummary = async ({ startDate = "", endDate = "" } = {}) => {
         setLoadingSummary(true)
@@ -53,16 +35,15 @@ function Dashboard() {
         if (!error) {
             setSummary(data)
             console.log(data)
-            // setSummary({
-            //     'income': calculateTransaction(data, 'income'),
-            //     'expense': calculateTransaction(data, 'expense')
-            // })
+
         } else {
-            setError(message)
+            setErrorSummary(message)
         }
 
         setLoadingSummary(false)
     }
+
+
 
     useEffect(() => {
         // const now = new Date();
@@ -75,65 +56,9 @@ function Dashboard() {
         // fetchCategories();
     }, []);
 
-    // const handleAddClick = () => {
-    //     setSelectedTransaction(null);
-    //     setIsOpen(true);
-    //     setError("");
-    // };
-
-    // const handleAddTransaction = async (transaction) => {
-    //     setLoadingTransactions(true)
-    //     const { error, message } = await createTransaction(transaction);
-    //     if (error) {
-    //         setError(message)
-    //         setLoadingTransactions(false)
-    //     }
-    //     // setIsOpen(false)
-    //     await fetchTransactions();
-    //     setLoadingTransactions(false)
-    // };
-
-    // const handleUpdateClick = (transaction) => {
-    //     setSelectedTransaction(transaction);
-    //     setIsOpen(true);
-    //     setError("");
-    // };
-
-    // const handleUpdateTransaction = async (transaction) => {
-    //     setLoadingTransactions(true)
-    //     const { error, message } = await updateTransaction(transaction.id, { description: transaction.description, amount: transaction.amount, categoryId: transaction.categoryId, date: transaction.date });
-    //     if (error) {
-    //         setError(message)
-    //         setLoadingTransactions(false)
-    //     }
-    //     setIsOpen(false)
-    //     await fetchTransactions();
-    //     setLoadingTransactions(false)
-    // };
-
-    // const handleDeleteClick = (transaction) => {
-    //     setSelectedTransaction(transaction);
-    //     setIsDeleteOpen(true);
-    //     setError("");
-    // };
-
-    // const handleDeleteTransaction = async () => {
-    //     if (!selectedTransaction) return;
-    //     setLoadingTransactions(true)
-    //     const { error, message } = await deleteTransaction(selectedTransaction.id);
-    //     if (error) {
-    //         setError(message)
-    //         return
-    //     }
-    //     setIsDeleteOpen(false);
-    //     setSelectedTransaction(null);
-    //     await fetchTransactions();
-    //     setLoadingTransactions(false)
-    // };
-
     return (
         <div className="bg-slate-200 p-8 min-h-screen">
-            {error && <p>{error}</p>}
+            {errorSummary && <p>{errorSummary}</p>}
 
             <div className='flex flex-col md:flex-row max-w-7xl mx-auto mb-5 justify-between'>
                 <div className='flex items-end'>
@@ -198,29 +123,7 @@ function Dashboard() {
                 </div>
 
             }
-
-            <div className='max-w-7xl mx-auto  mt-7 rounded-lg'>
-                <h1 className='text-2xl font-bold mb-4'>Upcoming Cash Obligations</h1>
-                <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 sm:grid sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-center sm:gap-3">
-                    <div className="min-w-0">
-                        <h3 className="truncate font-semibold text-gray-800">
-                            Monthly Electricity Bill
-                        </h3>
-                    </div>
-                    <p className="font-bold text-gray-900 md:font-normal md:text-black">
-                        Rp 350.000
-                    </p>
-                    <p className="text-sm md:text-base text-gray-600">
-                        Deadline: 15 November 2026
-                    </p>
-                    <button className="cursor-pointer w-full rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 sm:w-auto">
-                        Pay
-                    </button>
-
-                </div>
-            </div>
-
-
+            <CashObligationSection />
             <TransactionsPage isInDashboard={true} limit={10} />
         </div>
 
