@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { formatDateForInput } from "../utils/formatDate";
 import { createTransaction, updateTransaction } from "../api/transactionApi";
 import { toast } from "sonner";
+import { deleteCashObligation } from "../api/cash_obligation";
 
 function AddTransactionPage() {
     const navigate = useNavigate();
@@ -15,6 +16,8 @@ function AddTransactionPage() {
     const [date, setDate] = useState(formatDateForInput(initialData?.date) || "")
 
     const [loading, setLoading] = useState(false);
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,7 +37,14 @@ function AddTransactionPage() {
             if (error) {
                 toast.error(message);
                 setLoading(false)
-
+            }
+            if (initialData?.isObligation) {
+                const { error, message } = await deleteCashObligation(initialData?.idObligation);
+                if (error) {
+                    toast.error(message);
+                    setLoading(false)
+                }
+                navigate(-1)
             }
             toast.success("Transaksi berhasil dibuat!");
         }
@@ -50,7 +60,21 @@ function AddTransactionPage() {
                 <h1 className="text-2xl font-bold mb-4">Add New Transaction</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="">
-                        <div>
+                        <div className="mb-4">
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                Description
+                            </label>
+                            <input
+                                id="description"
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Enter description..."
+                                required
+                                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            />
+                        </div>
+                        <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
                                 Category
                             </label>
@@ -65,21 +89,8 @@ function AddTransactionPage() {
                             </select>
                         </div>
 
-                        <div>
-                            <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Description
-                            </label>
-                            <input
-                                id="description"
-                                type="text"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter description..."
-                                required
-                                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                            />
-                        </div>
-                        <div>
+
+                        <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
                                 Amount
                             </label>

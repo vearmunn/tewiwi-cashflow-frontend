@@ -5,6 +5,8 @@ import { formatRupiah } from "../utils/formatRupiah";
 import { formatDateForOutput } from "../utils/formatDate";
 import ConfirmDeleteDialog from "./ConfirmDeletionDialog";
 import { useNavigate } from "react-router-dom";
+import { getCategories } from "../api/categoryApi";
+import { toast } from "sonner";
 
 function CashObligationSection() {
     const navigate = useNavigate();
@@ -13,6 +15,21 @@ function CashObligationSection() {
     const [errorCashObligations, setErrorCashObligations] = useState("");
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [selectedCashObligation, setSelectedCashObligation] = useState()
+    const [categories, setCategories] = useState([])
+
+    const fetchCategories = async () => {
+        setLoadingCashObligations(true)
+        const { error, data, message } = await getCategories()
+
+        if (!error) {
+            setCategories(data)
+
+        } else {
+            toast.error(message)
+        }
+
+        setLoadingCashObligations(false)
+    }
 
     const fetchCashObligations = async ({ upcoming = false } = {}) => {
         setLoadingCashObligations(true)
@@ -20,10 +37,10 @@ function CashObligationSection() {
 
         if (!error) {
             setCashObligations(data)
-            console.log(data)
 
         } else {
             setErrorCashObligations(message)
+            toast.error(message)
         }
 
         setLoadingCashObligations(false)
@@ -45,6 +62,7 @@ function CashObligationSection() {
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchCashObligations()
+        fetchCategories()
     }, [])
 
     return (
@@ -79,9 +97,22 @@ function CashObligationSection() {
                             {formatRupiah(item.amount)}
                         </p>
                         <div>
-                            <button className="cursor-pointer w-full rounded-lg bg-green-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 sm:w-auto">
-                                {/* Catat Pembayaran */}
-                                Record Payment
+                            <button
+                                className="cursor-pointer w-full rounded-lg bg-green-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 sm:w-auto"
+                                onClick={() => {
+                                    navigate("/add-transaction", {
+                                        state: {
+                                            isUpdating: false,
+                                            idObligation: item.id,
+                                            description: item.description,
+                                            amount: item.amount,
+                                            categories: categories,
+                                            isObligation: true
+                                        }
+                                    });
+                                }}
+                            >
+                                Catat Pembayaran
                             </button>
                             <button className="text-blue-500 ml-4 mr-4 cursor-pointer hover:text-blue-600" onClick={() => {
                                 navigate("/add-cash-obligation", {
@@ -90,7 +121,8 @@ function CashObligationSection() {
                                         description: item.description,
                                         amount: item.amount,
                                         date: item.date,
-                                        reminderDays: item.reminder_days_before
+                                        reminderDays: item.reminder_days_before,
+                                        isRecurring: item.is_recurring
                                     }
                                 });
                             }}>Update</button>

@@ -15,14 +15,23 @@ function AddCashObligationPage() {
     const [reminderDays, setReminderDays] = useState(initialData?.reminderDays ?? "")
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [frequency, setFrequency] = useState(initialData?.isRecurring == true ? "monthly" : "once");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
+        console.log(frequency)
 
         if (initialData) {
-            const { error, message } = await updateCashObligation(initialData.id, { description, amount, reminder_days: reminderDays, date });
+            const { error, message } = await updateCashObligation(initialData.id, {
+                description,
+                amount,
+                reminder_days: reminderDays,
+                date,
+                is_recurring: frequency == 'once' ? false : true,
+                recurring_day: frequency == 'once' ? null : Number(date.split("-")[2])
+            });
             if (error) {
                 setError(message)
                 toast.error(message);
@@ -30,7 +39,13 @@ function AddCashObligationPage() {
             }
             toast.success("Cash obligation berhasil diperbarui!");
         } else {
-            const { error, message } = await createCashObligation({ description, amount, reminder_days: reminderDays, date });
+            const { error, message } = await createCashObligation({
+                description, amount,
+                reminder_days: reminderDays,
+                date,
+                is_recurring: frequency == 'once' ? false : true,
+                recurring_day: frequency == 'once' ? null : Number(date.split("-")[2])
+            });
             if (error) {
                 setError(message)
                 toast.error(message);
@@ -91,7 +106,7 @@ function AddCashObligationPage() {
                                     className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                                 />
                             </div>
-                            <div className="mb-4 w-full">
+                            <div className="mb-0 w-full">
                                 <label className="mb-1 block text-sm font-medium text-gray-700">
                                     Pengingat Sebelum Jatuh Tempo
                                 </label>
@@ -111,6 +126,28 @@ function AddCashObligationPage() {
                                     </span>
                                 </div>
                             </div>
+
+                        </div>
+                        <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">
+                                Jenis Kewajiban
+                            </label>
+                            <div className="grid grid-cols-2 gap-3">
+                                <ObligationTypeOption
+                                    value='once'
+                                    title="Sekali Bayar"
+                                    subtitle="Dibayar satu kali saja."
+                                    checked={frequency === "once"}
+                                    onChange={(e) => setFrequency(e.target.value)} />
+
+                                <ObligationTypeOption
+                                    value='monthly'
+                                    title="Berulang"
+                                    subtitle="Pembayaran berulang setiap bulan."
+                                    checked={frequency === "monthly"}
+                                    onChange={(e) => setFrequency(e.target.value)} />
+                            </div>
+                            {date && reminderDays && frequency == 'once' && <p className="mt-4 text-sm text-blue-500">Note: Kewajiban ini dibayarkan satu kali, dengan pengingat yang akan muncul di dashboard mulai 7 November 2026.</p>}
                         </div>
                     </div>
                     {error && (
@@ -134,3 +171,33 @@ function AddCashObligationPage() {
     )
 }
 export default AddCashObligationPage
+
+function ObligationTypeOption({ value, checked, onChange, title, subtitle }) {
+    return (
+        <label className="cursor-pointer">
+            <input
+                type="radio"
+                name="frequency"
+                value={value}
+                checked={checked}
+                onChange={onChange}
+                className="peer sr-only"
+            />
+
+            <div className="p-4 border border-gray-200 rounded-xl transition-all
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        hover:border-gray-400">
+
+                <h3 className="font-semibold text-gray-800">
+                    {title}
+                </h3>
+
+                <p className="text-sm text-gray-500 mt-1">
+                    {subtitle}
+                </p>
+            </div>
+        </label>
+
+    )
+}
