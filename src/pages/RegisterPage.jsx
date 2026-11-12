@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { toast } from 'sonner';
 
 function RegisterPage() {
-    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -17,6 +16,7 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setError(false)
         setLoading(true)
         try {
             const response = await api.post("/auth/register", {
@@ -26,14 +26,17 @@ function RegisterPage() {
                 role
             });
 
-            const { access_token, user } = response.data.session;
+            const { status } = response.data;
 
-            localStorage.setItem("access_token", access_token);
-
-            if (user) {
-                localStorage.setItem("user", JSON.stringify(user));
+            if (status == "success") {
+                toast.success('Akun berhasil dibuat')
+                setEmail("")
+                setName("")
+                setPassword("")
+                setRole("")
             }
-            navigate("/");
+
+
         } catch (err) {
             console.log(err)
             setError(
@@ -151,15 +154,7 @@ function RegisterPage() {
                     </button>}
                 </form>
 
-                <p className="mt-6 text-center text-sm text-gray-600">
-                    Already have an account?{" "}
-                    <a
-                        href="/login"
-                        className="font-semibold text-blue-600 hover:text-blue-700"
-                    >
-                        Sign In
-                    </a>
-                </p>
+
             </div>
         </div>
     )

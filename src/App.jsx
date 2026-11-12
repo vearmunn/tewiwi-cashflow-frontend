@@ -9,6 +9,7 @@ import TransactionsPage from './pages/TransactionsPage';
 import AddCashObligationPage from './pages/AddCashObligationPage';
 import { Toaster } from 'sonner';
 import AddTransactionPage from './pages/AddTransactionPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -17,13 +18,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/categories" element={<CategoriesPage />} />
             <Route path="/transactions" element={<TransactionsPage />} />
             <Route path="/add-transaction" element={<AddTransactionPage />} />
             <Route path="/add-cash-obligation" element={<AddCashObligationPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Routes>

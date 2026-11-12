@@ -2,15 +2,15 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import closeIcon from "../assets/close.png";
 import menuIcon from "../assets/menu.png";
-import LogoutButton from "./LogoutButton";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navLinks = [
         { name: "Dashboard", path: "/" },
-        { name: "Transactions", path: "/transactions" },
-        { name: "Categories", path: "/categories" },
+        { name: "Transaksi", path: "/transactions" },
+        { name: "Kategori", path: "/categories" },
+        { name: "Akun Saya", path: "/profile" },
     ];
 
     const linkClass = ({ isActive }) =>
@@ -47,7 +47,6 @@ export default function Navbar() {
                                 {link.name}
                             </NavLink>
                         ))}
-                        <LogoutButton />
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -82,7 +81,6 @@ export default function Navbar() {
                                 {link.name}
                             </NavLink>
                         ))}
-                        <LogoutButton />
                     </div>
                 )}
             </div>

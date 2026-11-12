@@ -8,6 +8,8 @@ import SearchBar from "../components/SearchBar";
 import CustomDatePicker from "../components/CustomDatePicker";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { deleteTransaction, getTransactions } from "../api/transactionApi";
+import { exportTransactionsToPDF } from "../utils/exportToPDF";
+import { exportTransactionsToCSV } from "../utils/exportToCSV";
 
 function TransactionsPage({ isInDashboard = false, limit = null }) {
     const navigate = useNavigate()
@@ -100,8 +102,27 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
     return (
         <div className="bg-slate-200 p-8 min-h-screen">
             <CustomContainer>
+                <div className="flex justify-between items-center">
+                    <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transaction' : 'Transactions'}</h1>
+                    {isInDashboard && <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700'>
+                        Lihat Semua
+                    </NavLink>}
+                    {!isInDashboard && <button
+                        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                        onClick={() => {
+                            navigate('/add-transaction', {
+                                state: {
+                                    isUpdating: false,
+                                    categories: categories
+                                }
+                            })
+                        }}
+                    >
+                        + Add Transaction
+                    </button>}
+                </div>
                 {!isInDashboard && <div>
-                    <h1 className='text-2xl font-bold'>Filter</h1>
+                    {/* <h1 className='text-2xl font-bold'>Filter</h1> */}
                     <br />
                     <SearchBar
                         search={filter.search}
@@ -191,27 +212,30 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                 </div>}
                 {error && <p>{error}</p>}
                 <div className='flex items-center justify-between'>
-                    <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transaction' : 'Transactions'}</h1>
                     {loadingTransactions && <LoadingSpinner />}
                     {isInDashboard
                         ?
-                        <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700'>
-                            Lihat Semua
-                        </NavLink>
+                        <p></p>
                         :
-                        <button
-                            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                            onClick={() => {
-                                navigate('/add-transaction', {
-                                    state: {
-                                        isUpdating: false,
-                                        categories: categories
-                                    }
-                                })
-                            }}
-                        >
-                            + Add Transaction
-                        </button>}
+                        <div className="flex justify-end w-full">
+                            <button
+                                className="rounded-lg bg-red-500 ml-3 px-4 py-2 text-white hover:bg-red-700"
+                                onClick={() => {
+                                    exportTransactionsToPDF(transactions, categories)
+                                }}
+                            >
+                                PDF
+                            </button>
+                            <button
+                                className="rounded-lg bg-green-500 ml-3 px-4 py-2 text-white hover:bg-green-700"
+                                onClick={() => {
+                                    exportTransactionsToCSV(transactions, categories)
+                                }}
+                            >
+                                CSV
+                            </button>
+                        </div>
+                    }
                 </div>
 
                 {!loadingTransactions && !loadingCategories && transactions.map((transaction) => (
