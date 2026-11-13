@@ -48,16 +48,14 @@ function RegisterPage() {
         }
 
     };
+
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
             <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-                <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
-                    Register
-                </h1>
-
-                <p className="mb-8 text-center text-gray-500">
+                <h1 className="mb-5 text-center text-3xl font-bold text-gray-800">
                     Create a new account
-                </p>
+                </h1>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
@@ -91,7 +89,7 @@ function RegisterPage() {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="Insert your name..."
+                            placeholder="Insert name..."
                             required
                             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                         />
@@ -109,7 +107,7 @@ function RegisterPage() {
                             type="text"
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
-                            placeholder="Insert your role..."
+                            placeholder="Insert role..."
                             required
                             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                         />
@@ -129,7 +127,7 @@ function RegisterPage() {
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
+                                placeholder="Enter password"
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-20 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                             />
@@ -153,8 +151,6 @@ function RegisterPage() {
                         Sign Up
                     </button>}
                 </form>
-
-
             </div>
         </div>
     )
