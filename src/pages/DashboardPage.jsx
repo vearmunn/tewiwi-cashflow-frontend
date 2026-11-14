@@ -8,11 +8,14 @@ import SummaryItem from '../components/SummaryItem';
 import { formatRupiah } from '../utils/formatRupiah';
 import TransactionsPage from './TransactionsPage';
 import { getSummary } from '../api/transactionApi';
-import Charts from '../components/Charts';
+
 import CustomDatePicker from '../components/CustomDatePicker';
 import { formatDateForOutput } from '../utils/formatDate';
 import LoadingSpinner from '../components/LoadingSpinner';
 import CashObligationSection from '../components/CashObligationSection';
+import MyLineChart from '../components/LineChart';
+import CategoryPieChart, { PieChartLabel } from '../components/PieChart';
+import { EXPENSE_COLORS, INCOME_COLORS } from '../utils/colors';
 
 function Dashboard() {
     const [summary, setSummary] = useState([]);
@@ -117,7 +120,26 @@ function Dashboard() {
                     <div className='bg-white p-3 mt-7 rounded-xl'>
                         <h1 className='text-2xl font-bold mb-4'>Income and Expense Trends</h1>
                         <div className='h-96 mt-5 p-'>
-                            <Charts data={summary.data} />
+                            <MyLineChart data={summary.data} />
+                        </div>
+                        <h1 className='text-2xl font-bold mt-10'>Category Breakdown</h1>
+                        <div className='flex mt-2'>
+                            <div className='w-full'>
+                                <div className='h-72 w-full'>
+                                    <CategoryPieChart label="Expense" data={summary.sum_expense} colors={EXPENSE_COLORS} />
+                                </div>
+                                <div className="mt-4 space-y-3">
+                                    <PieChartLabel data={summary.sum_expense} colors={EXPENSE_COLORS} />
+                                </div>
+                            </div>
+                            <div className='w-full'>
+                                <div className='h-72 w-full'>
+                                    <CategoryPieChart label="Income" data={summary.sum_income} colors={INCOME_COLORS} />
+                                </div>
+                                <div className="mt-4 space-y-3">
+                                    <PieChartLabel data={summary.sum_income} colors={INCOME_COLORS} />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

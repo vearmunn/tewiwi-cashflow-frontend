@@ -2,28 +2,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { formatDateShort } from "../utils/formatDate";
 import { formatRupiah } from "../utils/formatRupiah";
 
-function Charts({ data }) {
-    // const chartData = Object.values(
-    //     data.reduce((acc, transaction) => {
-    //         const date = transaction.date.split('T')[0];
-
-    //         if (!acc[date]) {
-    //             acc[date] = {
-    //                 date,
-    //                 income: 0,
-    //                 expense: 0,
-    //             };
-    //         }
-
-    //         if (transaction.category_type === 'income') {
-    //             acc[date].income += Number(transaction.amount);
-    //         } else if (transaction.category_type === 'expense') {
-    //             acc[date].expense += Number(transaction.amount);
-    //         }
-
-    //         return acc;
-    //     }, {})
-    // ).sort((a, b) => new Date(a.date) - new Date(b.date));
+function MyLineChart({ data }) {
 
     return (
 
@@ -70,4 +49,4 @@ function Charts({ data }) {
         </ResponsiveContainer >
     )
 }
-export default Charts
+export default MyLineChart
