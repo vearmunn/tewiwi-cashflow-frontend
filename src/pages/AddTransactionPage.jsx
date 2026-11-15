@@ -57,7 +57,7 @@ function AddTransactionPage() {
     return (
         <div className="bg-slate-200 w-full min-h-[calc(100vh-50px)] flex items-center justify-center">
             <div className="w-full max-w-3xl mr-4 ml-4 mx-auto bg-white p-5 rounded-xl">
-                <h1 className="text-2xl font-bold mb-4">Add New Transaction</h1>
+                <h1 className="text-2xl font-bold mb-4">{initialData.isUpdating ? "Perbarui Transaksi" : "Tambah Transaksi Baru"}</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="">
                         <div className="mb-4">

@@ -10,6 +10,9 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { deleteTransaction, getTransactions } from "../api/transactionApi";
 import { exportTransactionsToPDF } from "../utils/exportToPDF";
 import { exportTransactionsToCSV } from "../utils/exportToCSV";
+import { formatDateForOutput } from "../utils/formatDate";
+import pdfIcon from "../assets/pdf.svg";
+import csvIcon from "../assets/csv.svg";
 
 function TransactionsPage({ isInDashboard = false, limit = null }) {
     const navigate = useNavigate()
@@ -17,6 +20,7 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [categories, setCategories] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [grouppedTransactions, setGrouppedTransactions] = useState([])
     const [loadingCategories, setLoadingCategories] = useState(true);
     const [loadingTransactions, setLoadingTransactions] = useState(true);
     const [error, setError] = useState("");
@@ -44,12 +48,25 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
         setLoadingCategories(false)
     }
 
+
+
     const fetchTransactions = async ({ keywords = "", categoryId = "", type = "", startDate = "", endDate = "" } = {}) => {
         setLoadingTransactions(true)
         const { error, data, message } = await getTransactions({ limit, search: keywords, categoryId, type, startDate, endDate })
 
         if (!error) {
             setTransactions(data)
+            setGrouppedTransactions(data.reduce((groups, transaction) => {
+                const date = transaction.date.split('T')[0];
+
+                if (!groups[date]) {
+                    groups[date] = [];
+                }
+
+                groups[date].push(transaction);
+
+                return groups;
+            }, {}))
 
         } else {
             setError(message)
@@ -101,25 +118,54 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
 
     return (
         <div className="bg-slate-200 p-8 min-h-screen">
+
             <CustomContainer>
                 <div className="flex justify-between items-center">
                     <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transaction' : 'Transactions'}</h1>
-                    {isInDashboard && <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700'>
+                    {isInDashboard && <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700 text-end'>
                         Lihat Semua
                     </NavLink>}
-                    {!isInDashboard && <button
-                        className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                        onClick={() => {
-                            navigate('/add-transaction', {
-                                state: {
-                                    isUpdating: false,
-                                    categories: categories
-                                }
-                            })
-                        }}
-                    >
-                        + Add Transaction
-                    </button>}
+                    {!isInDashboard && <div className="flex">
+                        <button
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 font-semibold"
+                            onClick={() => {
+                                navigate('/add-transaction', {
+                                    state: {
+                                        isUpdating: false,
+                                        categories: categories
+                                    }
+                                })
+                            }}
+                        >
+                            + Add Transaction
+                        </button>
+                        <div className="flex justify-end">
+                            <div className="flex rounded-lg bg-red-500 ml-3 px-4 py-2 hover:bg-red-700 justify-center items-center">
+                                <img src={pdfIcon} className="w-5 h-5 mr-1" alt="" srcset="" />
+                                <button
+                                    className=" text-white font-semibold"
+                                    onClick={() => {
+                                        exportTransactionsToPDF(transactions, categories)
+                                    }}
+                                >
+                                    Export PDF
+                                </button>
+                            </div>
+                            <div className="flex rounded-lg bg-green-500 ml-3 px-4 py-2 hover:bg-green-700 justify-center items-center">
+                                <img src={csvIcon} className="w-5 h-5 mr-1" alt="" srcset="" />
+                                <button
+                                    className=" text-white "
+                                    onClick={() => {
+                                        exportTransactionsToCSV(transactions, categories)
+                                    }}
+                                >
+                                    Export CSV
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>}
                 </div>
                 {!isInDashboard && <div>
                     {/* <h1 className='text-2xl font-bold'>Filter</h1> */}
@@ -213,56 +259,44 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                 {error && <p>{error}</p>}
                 <div className='flex items-center justify-between'>
                     {loadingTransactions && <LoadingSpinner />}
-                    {isInDashboard
-                        ?
-                        <p></p>
-                        :
-                        <div className="flex justify-end w-full">
-                            <button
-                                className="rounded-lg bg-red-500 ml-3 px-4 py-2 text-white hover:bg-red-700"
-                                onClick={() => {
-                                    exportTransactionsToPDF(transactions, categories)
-                                }}
-                            >
-                                PDF
-                            </button>
-                            <button
-                                className="rounded-lg bg-green-500 ml-3 px-4 py-2 text-white hover:bg-green-700"
-                                onClick={() => {
-                                    exportTransactionsToCSV(transactions, categories)
-                                }}
-                            >
-                                CSV
-                            </button>
-                        </div>
-                    }
+
                 </div>
 
-                {!loadingTransactions && !loadingCategories && transactions.map((transaction) => (
-                    <TransactionItem
-                        key={transaction.id}
-                        description={transaction.description}
-                        date={transaction.date}
-                        category={categories.find((item) => item.id === transaction.category_id).name}
-                        type={transaction.category_type}
-                        amount={transaction.amount}
-                        onClickDelete={() => handleDeleteClick(transaction)}
-                        onClickUpdate={() => {
-                            navigate('/add-transaction', {
-                                state: {
-                                    isUpdating: true,
-                                    id: transaction.id,
-                                    description: transaction.description,
-                                    date: transaction.date,
-                                    category_id: categories.find((item) => item.id === transaction.category_id).id,
-                                    type: transaction.category_type,
-                                    amount: transaction.amount,
-                                    categories: categories
-                                }
-                            })
-                        }}
-                    />
-                ))}
+                {!loadingTransactions && !loadingCategories && Object.entries(grouppedTransactions).map(([date, items]) => (
+                    <div key={date} className="mb-5 mt-5">
+                        <div className="flex justify-between items-centers bg-gray-100 py-2 px-3 rounded-lg">
+                            <h3 className="font-semibold text-sm text-gray-600 ">
+                                {formatDateForOutput(date)}
+                            </h3>
+                            <p className="text-xs text-gray-500">{items.length} transaksi</p>
+                        </div>
+                        {items.map((transaction) => (
+                            <TransactionItem
+                                key={transaction.id}
+                                description={transaction.description}
+                                category={categories.find((item) => item.id === transaction.category_id).name}
+                                type={transaction.category_type}
+                                amount={transaction.amount}
+                                onClickDelete={() => handleDeleteClick(transaction)}
+                                onClickUpdate={() => {
+                                    navigate('/add-transaction', {
+                                        state: {
+                                            isUpdating: true,
+                                            id: transaction.id,
+                                            date: transaction.date,
+                                            description: transaction.description,
+                                            category_id: categories.find((item) => item.id === transaction.category_id).id,
+                                            type: transaction.category_type,
+                                            amount: transaction.amount,
+                                            categories: categories
+                                        }
+                                    })
+                                }}
+                            />
+                        ))}
+                    </div>
+                ))
+                }
                 <ConfirmDeleteDialog
                     isOpen={isDeleteOpen}
                     onClose={() => {
