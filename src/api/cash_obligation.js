@@ -33,6 +33,16 @@ export const updateCashObligation = async (id, transaction) => {
 
     return { error: false, data: response.data, message: response.message };
 };
+export const renewCashObligation = async (id) => {
+    const response = await api.put(
+        `/cash-obligations/renew/${id}`
+    );
+    if (response.status !== 200) {
+        return { error: true, data: null, message: response.message };
+    }
+
+    return { error: false, data: response.data, message: response.message };
+};
 
 export const deleteCashObligation = async (id) => {
     const response = await api.delete(`/cash-obligations/${id}`);

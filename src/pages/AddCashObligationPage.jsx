@@ -3,6 +3,7 @@ import { createCashObligation, updateCashObligation } from "../api/cash_obligati
 import { toast } from "sonner"
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatDateForInput } from "../utils/formatDate";
+import { formatRupiahField } from "../utils/formatRupiah";
 
 function AddCashObligationPage() {
     const navigate = useNavigate();
@@ -83,9 +84,12 @@ function AddCashObligationPage() {
                             </label>
                             <input
                                 id="amount"
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                type="text"
+                                value={formatRupiahField(amount)}
+                                onChange={(e) => {
+                                    const rawValue = e.target.value.replace(/\D/g, '');
+                                    setAmount(rawValue);
+                                }}
                                 placeholder="Enter amount..."
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"

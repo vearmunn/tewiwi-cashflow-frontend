@@ -82,7 +82,7 @@ const renderLabel = ({
 
 export function PieChartLabel({ data, colors }) {
     return (
-        <div className="w-1/2 mx-auto">
+        <div className="w-full md:w-3/4 lg:w-1/2 mx-auto">
             {data.map((item, index) => (
                 <div key={index} className="flex justify-between items-center mb-2">
                     <div className="flex items-center gap-2">

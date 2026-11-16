@@ -117,11 +117,10 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
     };
 
     return (
-        <div className="bg-slate-200 p-8 min-h-screen">
-
+        <div className="bg-slate-200 pt-8 min-h-screen">
             <CustomContainer>
                 <div className="flex justify-between items-center">
-                    <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transaction' : 'Transactions'}</h1>
+                    <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transactions' : 'Transactions'}</h1>
                     {isInDashboard && <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700 text-end'>
                         Lihat Semua
                     </NavLink>}

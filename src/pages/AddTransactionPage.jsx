@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { formatDateForInput } from "../utils/formatDate";
 import { createTransaction, updateTransaction } from "../api/transactionApi";
 import { toast } from "sonner";
-import { deleteCashObligation } from "../api/cash_obligation";
+import { deleteCashObligation, renewCashObligation } from "../api/cash_obligation";
+import { formatRupiahField } from "../utils/formatRupiah";
 
 function AddTransactionPage() {
     const navigate = useNavigate();
@@ -39,10 +40,20 @@ function AddTransactionPage() {
                 setLoading(false)
             }
             if (initialData?.isObligation) {
-                const { error, message } = await deleteCashObligation(initialData?.idObligation);
-                if (error) {
-                    toast.error(message);
-                    setLoading(false)
+                if (initialData?.isRecurring) {
+                    const { error, message } = await renewCashObligation(initialData?.idObligation);
+                    if (error) {
+                        toast.error(message);
+                        setLoading(false)
+                    }
+
+                } else {
+                    const { error, message } = await deleteCashObligation(initialData?.idObligation);
+                    if (error) {
+                        toast.error(message);
+                        setLoading(false)
+                    }
+
                 }
                 navigate(-1)
             }
@@ -54,6 +65,7 @@ function AddTransactionPage() {
         setAmount(0)
         setDate("")
     }
+
     return (
         <div className="bg-slate-200 w-full min-h-[calc(100vh-50px)] flex items-center justify-center">
             <div className="w-full max-w-3xl mr-4 ml-4 mx-auto bg-white p-5 rounded-xl">
@@ -76,7 +88,7 @@ function AddTransactionPage() {
                         </div>
                         <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Category
+                                Kategori
                             </label>
                             <select
                                 name="category"
@@ -85,7 +97,7 @@ function AddTransactionPage() {
                                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
                             >
 
-                                {initialData.categories.map((category) => (<option value={category.id} key={category.id}>{category.name}</option>))}
+                                {initialData.categories.map((category) => (<option value={category.id} key={category.id}>{category.name} - {category.type}</option>))}
                             </select>
                         </div>
 
@@ -97,8 +109,11 @@ function AddTransactionPage() {
                             <input
                                 id="amount"
                                 type="text"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                value={formatRupiahField(amount)}
+                                onChange={(e) => {
+                                    const rawValue = e.target.value.replace(/\D/g, '');
+                                    setAmount(rawValue);
+                                }}
                                 placeholder="Enter amount..."
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"

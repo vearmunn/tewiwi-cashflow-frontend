@@ -5,3 +5,8 @@ export const formatRupiah = (amount) => {
         maximumFractionDigits: 0,
     }).format(amount);
 };
+export const formatRupiahField = (value) => {
+    if (!value) return '';
+
+    return new Intl.NumberFormat('id-ID').format(value);
+};

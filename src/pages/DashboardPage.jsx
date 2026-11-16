@@ -123,7 +123,7 @@ function Dashboard() {
                             <MyLineChart data={summary.data} />
                         </div>
                         <h1 className='text-2xl font-bold mt-10'>Category Breakdown</h1>
-                        <div className='flex mt-2'>
+                        <div className='flex flex-col md:flex-row mt-2'>
                             <div className='w-full'>
                                 <div className='h-72 w-full'>
                                     <CategoryPieChart label="Expense" data={summary.sum_expense} colors={EXPENSE_COLORS} />
