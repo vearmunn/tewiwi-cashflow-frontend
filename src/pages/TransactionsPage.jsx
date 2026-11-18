@@ -13,6 +13,7 @@ import { exportTransactionsToCSV } from "../utils/exportToCSV";
 import { formatDateForOutput } from "../utils/formatDate";
 import pdfIcon from "../assets/pdf.svg";
 import csvIcon from "../assets/csv.svg";
+import receiptIcon from "../assets/receipt.png";
 
 function TransactionsPage({ isInDashboard = false, limit = null }) {
     const navigate = useNavigate()
@@ -117,11 +118,16 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
     };
 
     return (
-        <div className="bg-slate-200 pt-8 min-h-screen">
+        <div className="bg-gray-50 pt-8 min-h-screen">
             <CustomContainer>
                 <div className="flex justify-between items-center">
-                    <h1 className='text-2xl font-bold'>{isInDashboard ? 'Recent Transactions' : 'Transactions'}</h1>
-                    {isInDashboard && <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700 text-end'>
+                    <div className="flex">
+                        <div className='bg-secondary/40 rounded-xl p-2 mr-3 h-fit'>
+                            <img src={receiptIcon} className='w-5 h-5' alt="" srcset="" />
+                        </div>
+                        <h1 className='text-lg md:text-2xl font-bold'>{isInDashboard ? 'Transaksi Terbaru' : 'Transaksi'}</h1>
+                    </div>
+                    {isInDashboard && <NavLink to="/transactions" className='font-semibold text-blue-500 hover:text-blue-700 text-end text-sm md:text-base'>
                         Lihat Semua
                     </NavLink>}
                     {!isInDashboard && <div className="flex">
@@ -136,7 +142,7 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                                 })
                             }}
                         >
-                            + Add Transaction
+                            + Tambah
                         </button>
                         <div className="flex justify-end">
                             <div className="flex rounded-lg bg-red-500 ml-3 px-4 py-2 hover:bg-red-700 justify-center items-center">
@@ -171,7 +177,7 @@ function TransactionsPage({ isInDashboard = false, limit = null }) {
                     <br />
                     <SearchBar
                         search={filter.search}
-                        placeholder="Search transactions..."
+                        placeholder="Cari transaksi..."
                         handleChange={handleSearchChange}
                     />
                     <div className="flex mt-4 gap-5">

@@ -31,14 +31,14 @@ function MyLineChart({ data }) {
                     type="monotone"
                     dataKey="income"
                     stroke="#16a34a"
-                    name="Income"
+                    name="Pemasukan"
                 />
 
                 <Line
                     type="monotone"
                     dataKey="expense"
                     stroke="#dc2626"
-                    name="Expense"
+                    name="Pengeluaran"
                 />
                 <Legend wrapperStyle={{
                     position: 'relative',

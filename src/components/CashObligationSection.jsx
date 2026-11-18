@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "../api/categoryApi";
 import { toast } from "sonner";
 import receiptIcon from "../assets/receipt.svg";
+import payIcon from "../assets/pay.png";
 
 function CashObligationSection() {
     const navigate = useNavigate();
@@ -77,14 +78,19 @@ function CashObligationSection() {
     }, [])
 
     return (
-        <div className='max-w-7xl mx-auto  mt-7 rounded-lg bg-white p-3'>
+        <div className='max-w-7xl mx-auto  mt-7 bg-white p-3 rounded-lg border border-gray-200'>
             <div className="flex justify-between mb-5">
-                <h1 className='text-2xl font-bold'>Upcoming Cash Obligations</h1>
+                <div className="flex">
+                    <div className='bg-secondary/40 rounded-xl p-2 mr-3 h-fit'>
+                        <img src={payIcon} className='w-5 h-5' alt="" srcset="" />
+                    </div>
+                    <h1 className='text-lg md:text-2xl  font-bold'>Kewajiban Pembayaran Mendatang</h1>
+                </div>
                 <button
-                    className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                    className="rounded-lg text-xs md:text-base  bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                     onClick={() => { navigate("/add-cash-obligation"); }}
                 >
-                    + Add Cash Obligation
+                    + Tambah
                 </button>
             </div>
 
@@ -190,7 +196,7 @@ function CashObligationItem({ item, onFinish, onUpdate, onDelete }) {
                     </div>
                 </div>
             </div>
-            <div className="block md:hidden">
+            <div className="block md:hidden mb-5">
                 <div
                     key={item.id}
                     className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm mt-4"

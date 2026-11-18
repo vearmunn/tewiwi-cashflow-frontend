@@ -61,26 +61,26 @@ function AddCashObligationPage() {
     return (
         <div className="bg-slate-200 w-full min-h-[calc(100vh-50px)] flex items-center justify-center">
             <div className="w-full max-w-3xl mr-4 ml-4 mx-auto bg-white p-5 rounded-xl">
-                <h1 className="text-2xl font-bold mb-4">Add Upcoming Cash Obligation</h1>
+                <h1 className="text-2xl font-bold mb-4">Tambah Kewajiban Pembayaran</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="">
                         <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Description
+                                Deskripsi
                             </label>
                             <input
                                 id="description"
                                 type="text"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter description..."
+                                placeholder="Masukkan deskripsi..."
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                             />
                         </div>
                         <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Amount
+                                Nominal
                             </label>
                             <input
                                 id="amount"
@@ -90,7 +90,7 @@ function AddCashObligationPage() {
                                     const rawValue = e.target.value.replace(/\D/g, '');
                                     setAmount(rawValue);
                                 }}
-                                placeholder="Enter amount..."
+                                placeholder="Masukkan nominal..."
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                             />
@@ -151,7 +151,7 @@ function AddCashObligationPage() {
                                     checked={frequency === "monthly"}
                                     onChange={(e) => setFrequency(e.target.value)} />
                             </div>
-                            {date && reminderDays && frequency == 'once' && <p className="mt-4 text-sm text-blue-500">Note: Kewajiban ini dibayarkan satu kali, dengan pengingat yang akan muncul di dashboard mulai 7 November 2026.</p>}
+                            {/* {date && reminderDays && frequency == 'once' && <p className="mt-4 text-sm text-blue-500">Note: Kewajiban ini dibayarkan satu kali, dengan pengingat yang akan muncul di dashboard mulai 7 November 2026.</p>} */}
                         </div>
                     </div>
                     {error && (
@@ -165,7 +165,7 @@ function AddCashObligationPage() {
                             disabled={loading}
                             className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
                         >
-                            {loading ? "Loading..." : initialData ? "Update Cash Obligation" : "Add Cash Obligation"}
+                            {loading ? "Loading..." : initialData ? "Update" : "Tambah"}
 
                         </button>
                     </div>

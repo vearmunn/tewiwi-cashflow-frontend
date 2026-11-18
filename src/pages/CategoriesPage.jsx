@@ -95,24 +95,24 @@ function CategoriesPage() {
                 <div>
                     {!loading && <div>
                         <div className="flex justify-between">
-                            <h1 className='text-2xl font-bold'>Category List</h1>
+                            <h1 className='text-2xl font-bold'>Daftar Kategori</h1>
                             <button
                                 onClick={() => handleAddClick()}
                                 className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                             >
-                                + Add Category
+                                + Tambah
                             </button>
                         </div>
                         <div className="grid grid-cols-3 mt-6">
-                            <p className="font-bold">Name</p>
-                            <p className="font-bold text-center">Type</p>
+                            <p className="font-bold">Nama</p>
+                            <p className="font-bold text-center">Tipe</p>
 
 
                         </div>
                         {categories.map((category) => (
                             <div className="grid grid-cols-3 mt-6" key={category.id}>
                                 <p className="">{category.name}</p>
-                                <p className="text-center">{category.type}</p>
+                                <p className={`text-center ${category.type == 'income' ? `text-green-600` : `text-red-600`}`}>{category.type == 'income' ? 'Pemasukan' : 'Pengeluaran'}</p>
                                 <div className="text-end">
                                     <button className="text-blue-500 mr-6" onClick={() => handleUpdateClick(category)}>Update</button>
                                     <button className="text-red-500" onClick={() => handleDeleteClick(category)}>Delete</button>

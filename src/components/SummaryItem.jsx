@@ -1,14 +1,15 @@
 function SummaryItem({ icon, title, value, iconColor }) {
     return (
-        <div className={`p-4 rounded-lg shadow-md bg-white`}>
-            <div className='flex justify-between items-center'>
-                <p>{title}</p>
-                <div className={`${iconColor} p-1 h-8 w-8 rounded-lg`}>
-                    <img src={icon} className={`brightness-0 invert`} />
-                </div>
-
+        <div className={`p-4 flex  lg:justify-center`}>
+            <div className={`${iconColor} p-1 h-7 w-7 rounded-lg mr-2`}>
+                <img src={icon} className={`brightness-0 invert`} />
             </div>
-            <p className='text-2xl font-semibold'>{value}</p>
+            <div>
+                <div className='flex justify-between items-center'>
+                    <p>{title}</p>
+                </div>
+                <p className='text-xl lg:text-2xl font-semibold'>{value}</p>
+            </div>
         </div>
     )
 }

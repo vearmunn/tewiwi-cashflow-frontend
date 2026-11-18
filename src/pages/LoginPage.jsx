@@ -2,6 +2,7 @@ import { useState } from 'react'
 import api from "../api/axios";
 import supabase from '../api/supabase';
 import { useNavigate } from "react-router-dom";
+import tewiwiLogo from '../assets/tewiwi.png'
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -50,12 +51,15 @@ function LoginPage() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
             <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-                <h1 className="mb-2 text-center text-3xl font-bold text-gray-800">
-                    Welcome Back
+                <div className='w-full flex items-center justify-center mb-8'>
+                    <img src={tewiwiLogo} className='w-32 h-32' alt="" srcset="" />
+                </div>
+                <h1 className="text-center text-3xl font-bold text-gray-800 mb-2">
+                    Selamat Datang
                 </h1>
 
                 <p className="mb-8 text-center text-gray-500">
-                    Sign in to your account
+                    Silakan masuk ke Akun Anda
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -72,7 +76,7 @@ function LoginPage() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="you@example.com"
+                            placeholder="anda@example.com"
                             required
                             className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                         />
@@ -92,7 +96,7 @@ function LoginPage() {
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
+                                placeholder="Masukkan password Anda"
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-20 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                             />
@@ -100,9 +104,9 @@ function LoginPage() {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 hover:text-blue-600"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-300 hover:font-semibold hover:text-blue-400"
                             >
-                                {showPassword ? "Hide" : "Show"}
+                                {showPassword ? "Sembunyi" : "Lihat"}
                             </button>
                         </div>
                     </div>
@@ -111,9 +115,9 @@ function LoginPage() {
 
                     {loading ? <p>Loading...</p> : <button
                         type="submit"
-                        className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
+                        className="w-full rounded-lg bg-primary py-3 font-semibold text-white transition hover:bg-secondary active:scale-[0.98]"
                     >
-                        Sign In
+                        Login
                     </button>}
                 </form>
 

@@ -74,14 +74,14 @@ function AddTransactionPage() {
                     <div className="">
                         <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Description
+                                Deskripsi
                             </label>
                             <input
                                 id="description"
                                 type="text"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter description..."
+                                placeholder="Masukkan deskripsi..."
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                             />
@@ -97,14 +97,14 @@ function AddTransactionPage() {
                                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
                             >
 
-                                {initialData.categories.map((category) => (<option value={category.id} key={category.id}>{category.name} - {category.type}</option>))}
+                                {initialData.categories.map((category) => (<option value={category.id} key={category.id}>{category.name} - {category.type == 'income' ? 'Pemasukan' : 'Pengeluaran'}</option>))}
                             </select>
                         </div>
 
 
                         <div className="mb-4">
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Amount
+                                Nominal
                             </label>
                             <input
                                 id="amount"
@@ -114,14 +114,14 @@ function AddTransactionPage() {
                                     const rawValue = e.target.value.replace(/\D/g, '');
                                     setAmount(rawValue);
                                 }}
-                                placeholder="Enter amount..."
+                                placeholder="Masukkan nominal..."
                                 required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                             />
                         </div>
                         <div>
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Date
+                                Tanggal Transaksi
                             </label>
                             <input
                                 id="date"
@@ -141,7 +141,7 @@ function AddTransactionPage() {
                             disabled={loading}
                             className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                         >
-                            {loading ? "Saving..." : initialData.isUpdating ? "Update Transaction" : "Save Transaction"}
+                            {loading ? "Menyimpan..." : initialData.isUpdating ? "Update Transaksi" : "Simpan Transaksi"}
                         </button>
                     </div>
                 </form>

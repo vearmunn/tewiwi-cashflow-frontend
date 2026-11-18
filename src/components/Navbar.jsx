@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import closeIcon from "../assets/close.png";
 import menuIcon from "../assets/menu.png";
+import tewiwiText from "../assets/tewiwi_text.png";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,13 +27,7 @@ export default function Navbar() {
 
                     {/* Logo */}
                     <NavLink to="/" className="flex items-center gap-2">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-lg font-bold text-white">
-                            T
-                        </div>
-
-                        <span className="text-lg font-bold text-gray-900">
-                            Tewiwi Cashflow
-                        </span>
+                        <img src={tewiwiText} className="w-24" alt="" srcset="" />
                     </NavLink>
 
                     {/* Desktop Navigation */}

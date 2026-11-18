@@ -18,7 +18,7 @@ function TransactionItem({ description, category, type, amount, onClickUpdate, o
                     <div className="text-start bg-blue-100s w-full flex items-center justify-end">
                         <p className='bg-blue-400s w-3/4'>{category}</p>
                     </div>
-                    <p className="text-end bg-green-100s flex items-center justify-end">{type}</p>
+                    <p className="text-end bg-green-100s flex items-center justify-end">{type == 'income' ? 'Pemasukan' : 'Pengeluaran'}</p>
                     <p className="text-end bg-amber-100s flex items-center justify-end">{formatRupiah(amount)}</p>
                     <div className="text-end bg-gray-200s flex items-center justify-end">
                         <button className="text-blue-500 mr-6 cursor-pointer hover:text-blue-600" onClick={onClickUpdate}>Update</button>
@@ -48,12 +48,12 @@ function TransactionItem({ description, category, type, amount, onClickUpdate, o
                             ? 'bg-green-100 text-green-700'
                             : 'bg-red-100 text-red-700'
                             }`}>
-                            {type}
+                            {type == 'income' ? 'Pemasukan' : 'Pengeluaran'}
                         </span>
                     </div>
 
                     <div className="mb-4">
-                        <p className="text-xs text-gray-500 mb-1">Amount</p>
+                        <p className="text-xs text-gray-500 mb-1">Nominal</p>
                         <p className="text-lg font-bold text-gray-800">
                             {formatRupiah(amount)}
                         </p>
