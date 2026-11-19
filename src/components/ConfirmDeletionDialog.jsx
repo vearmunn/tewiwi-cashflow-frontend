@@ -53,8 +53,7 @@ export default function ConfirmDeleteDialog({
                     id="delete-dialog-description"
                     className="mt-2 text-sm leading-6 text-gray-500"
                 >
-                    Are you sure you want to delete this {itemName}?
-                    This action cannot be undone.
+                    Apakah Anda yakin ingin menghapus {itemName} ini?
                 </p>
 
                 <div className="mt-6 flex justify-end gap-3">
@@ -64,7 +63,7 @@ export default function ConfirmDeleteDialog({
                         disabled={loading}
                         className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
                     >
-                        Cancel
+                        Batal
                     </button>
 
                     <button
@@ -73,7 +72,7 @@ export default function ConfirmDeleteDialog({
                         disabled={loading}
                         className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        {loading ? "Deleting..." : "Delete"}
+                        {loading ? "Menghapus..." : "Hapus"}
                     </button>
                 </div>
             </div>

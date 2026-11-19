@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function CategoryForm({
     isOpen,
@@ -33,7 +34,7 @@ export default function CategoryForm({
             setType("")
 
         } catch (err) {
-            alert(err.message || "Failed to add category.")
+            toast.error(err)
         } finally {
             setLoading(false);
             onClose();
@@ -60,7 +61,7 @@ export default function CategoryForm({
                         id="category-modal-title"
                         className="text-xl font-bold text-gray-800"
                     >
-                        Add Category
+                        Tambah Kategori
                     </h2>
 
                     <button
@@ -85,7 +86,7 @@ export default function CategoryForm({
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Type
+                                Tipe
                             </label>
                             <select
                                 name="type"
@@ -93,14 +94,14 @@ export default function CategoryForm({
                                 onChange={(e) => setType(e.target.value)}
                                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2"
                             >
-                                <option value="expense">Expense</option>
-                                <option value="income">Income</option>
+                                <option value="expense">Pengeluaran</option>
+                                <option value="income">Pemasukan</option>
                             </select>
                         </div>
 
                         <div>
                             <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Category
+                                Kategori
                             </label>
                             <input
                                 id="name"
@@ -121,7 +122,7 @@ export default function CategoryForm({
                             disabled={loading}
                             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
                         >
-                            Cancel
+                            Batal
                         </button>
 
                         <button
@@ -129,7 +130,7 @@ export default function CategoryForm({
                             disabled={loading}
                             className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                         >
-                            {loading ? "Saving..." : selectedCategory ? "Update Category" : "Save Category"}
+                            {loading ? "Menyimpan..." : selectedCategory ? "Update" : "Simpan"}
                         </button>
                     </div>
                 </form>
