@@ -46,7 +46,7 @@ export default function ConfirmDeleteDialog({
                     id="delete-dialog-title"
                     className="text-lg font-semibold text-gray-900"
                 >
-                    Delete {itemName}?
+                    Hapus {itemName}?
                 </h2>
 
                 <p
