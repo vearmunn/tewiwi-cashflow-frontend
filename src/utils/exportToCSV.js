@@ -13,7 +13,7 @@ export const exportTransactionsToCSV = (transactions, categories) => {
         formatDateShort(transaction.date),
         transaction.description,
         categories.find((item) => item.id === transaction.category_id).name,
-        transaction.category_type,
+        transaction.category_type == 'income' ? "Pemasukan" : "Pengeluaran",
         transaction.amount,
     ]);
 

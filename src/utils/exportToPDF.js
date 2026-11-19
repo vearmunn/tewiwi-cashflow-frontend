@@ -8,7 +8,7 @@ export const exportTransactionsToPDF = (transactions, categories) => {
 
     // Document title
     doc.setFontSize(18);
-    doc.text("Tewiwi Cashflow - Transaction Report", 14, 20);
+    doc.text("Tewiwi Cashflow - Laporan Transaksi", 14, 20);
 
     // Tanggal Periode
     const firstDate = new Date(
@@ -30,7 +30,7 @@ export const exportTransactionsToPDF = (transactions, categories) => {
         formatDateShort(transaction.date),
         transaction.description,
         categories.find((item) => item.id === transaction.category_id).name,
-        transaction.category_type,
+        transaction.category_type == 'income' ? "Pemasukan" : "Pengeluaran",
         formatRupiah(transaction.amount),
     ]);
 
@@ -56,6 +56,16 @@ export const exportTransactionsToPDF = (transactions, categories) => {
         },
         columnStyles: {
             4: { halign: "right" },
+        },
+        didParseCell: (data) => {
+            if (data.section === "body" && data.column.index === 3) {
+                const isIncome = data.cell.raw === "Pemasukan";
+
+                data.cell.styles.textColor = isIncome
+                    ? [22, 163, 74]   // Green
+                    : [220, 38, 38];  // Red
+
+            }
         },
     });
 
