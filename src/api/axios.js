@@ -3,7 +3,7 @@ import axios from 'axios';
 import supabase from './supabase';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: "https://tewiwi-cashflow-backend.vercel.app",
     headers: {
         'Content-Type': 'application/json',
     },
